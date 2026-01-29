@@ -47,10 +47,9 @@ class ServiceProvider extends AddonServiceProvider
 
     public function boot()
     {
-        parent::boot();
-
-        // Manually register event listeners for Statamic v6 compatibility
-        // The $listen property doesn't auto-register in v6's AddonServiceProvider
+        // Note: parent::boot() is NOT called here to prevent duplicate listener registration in Statamic v6
+        // The $listen property doesn't work in v6's AddonServiceProvider, so we manually register listeners
+        
         Event::listen(EntrySaving::class, EntrySavingListener::class);
         Event::listen(EntrySaved::class, EntrySavedListener::class);
         Event::listen(EntryDeleted::class, EntryDeletedListener::class);
