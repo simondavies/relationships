@@ -244,11 +244,15 @@ class RelationshipProcessor
 
             /** @var EntryCollection $entries */
             $entries = $this->entries->query()->whereIn('id', $entryIds)->get();
+            
+            // Manually key by ID to ensure it works with database driver
+            $keyedEntries = [];
+            foreach ($entries as $entry) {
+                $keyedEntries[$entry->id()] = $entry;
+            }
 
-            $this->effectedEntries = array_merge(
-                $this->effectedEntries,
-                $entries->keyBy('id')->all()
-            );
+            // Use + operator to preserve integer keys (array_merge re-indexes numeric keys)
+            $this->effectedEntries = $this->effectedEntries + $keyedEntries;
         } elseif ($relationship->rightType == 'user') {
             $users = $this->getUsersByIds($entryIds);
 
@@ -459,6 +463,11 @@ class RelationshipProcessor
 
         if ($rightReference == null) {
             $rightReference = [];
+        }
+        
+        // Handle single value (int/string) - convert to array
+        if (!is_array($rightReference)) {
+            $rightReference = [$rightReference];
         }
 
         if (is_string($rightReference) && Str::startsWith($rightReference, '[') && Str::endsWith($rightReference, ']')) {
