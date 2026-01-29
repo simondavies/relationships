@@ -32,6 +32,12 @@ class EntrySavingListener extends BaseListener
 
         /** @var Entry $entry */
         $entry = $event->entry;
+        
+        // Convert database model to Entry object FIRST (before calling any methods)
+        if (method_exists($entry, 'toEntry')) {
+            $entry = $entry->toEntry();
+        }
+        
         $collection = $entry->collectionHandle();
 
         if (! $this->manager->hasRelationshipsForCollection($collection)) {
@@ -45,7 +51,8 @@ class EntrySavingListener extends BaseListener
         $isUpdating = $entry->id() !== null;
 
         if ($isUpdating) {
-            $foundEntry = $this->entries->find($entry->id());
+            // Use Statamic Facade to properly load entry with database driver
+            $foundEntry = \Statamic\Facades\Entry::find($entry->id());
 
             if ($foundEntry === null) {
                 $isUpdating = false;
@@ -54,8 +61,6 @@ class EntrySavingListener extends BaseListener
                 $isUpdating = true;
             }
         }
-
-        $entry = $this->checkForDatabaseObject($entry);
 
         $this->manager->processor()->setIsDeleting(false)->setPristineDetails($entry, ! $isUpdating);
     }
