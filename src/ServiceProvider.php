@@ -2,6 +2,7 @@
 
 namespace Stillat\Relationships;
 
+use Illuminate\Support\Facades\Event;
 use Statamic\Events\EntryDeleted;
 use Statamic\Events\EntrySaved;
 use Statamic\Events\EntrySaving;
@@ -73,5 +74,24 @@ class ServiceProvider extends AddonServiceProvider
         $this->app->singleton(RelationshipManager::class, function ($app) {
             return new RelationshipManager($app->make(RelationshipProcessor::class));
         });
+    }
+
+    public function boot()
+    {
+        parent::boot();
+        
+        // Manually register event listeners for Statamic v6 compatibility
+        // The $listen property doesn't auto-register in v6's AddonServiceProvider
+        Event::listen(EntrySaving::class, EntrySavingListener::class);
+        Event::listen(EntrySaved::class, EntrySavedListener::class);
+        Event::listen(EntryDeleted::class, EntryDeletedListener::class);
+        
+        Event::listen(UserSaving::class, UserSavingListener::class);
+        Event::listen(UserSaved::class, UserSavedListener::class);
+        Event::listen(UserDeleted::class, UserDeletedListener::class);
+        
+        Event::listen(TermSaving::class, TermSavingListener::class);
+        Event::listen(TermSaved::class, TermSavedListener::class);
+        Event::listen(TermDeleted::class, TermDeletedListener::class);
     }
 }
