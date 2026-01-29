@@ -46,6 +46,49 @@ You can search for this addon in the `Tools > Addons` section of the Statamic co
 composer require stillat/relationships
 ```
 
+## Statamic v6 Compatibility
+
+This fork includes compatibility fixes for Statamic v6 and the database (Eloquent) driver:
+
+### What's Fixed
+
+- Event listener registration compatible with Statamic v6's AddonServiceProvider
+- Proper handling of EntryModel objects from the database driver
+- Correct array key preservation when working with entry collections
+- Many-to-one relationship processing that handles multiple items
+- Automatic cleanup of previous relationships when reassigning entities
+
+### Requirements
+
+- PHP 8.1, 8.2, or 8.3
+- Statamic 4.16+, 5.x, or 6.x
+- Works with both flat-file and database (Eloquent) drivers
+
+### Known Limitations
+
+This package works best with the database driver when using `\Statamic\Facades\Entry::find()` for loading entries. The standard `EntryRepository` may not always load relationship field data correctly.
+
+### Installation for v6
+
+Add this repository to your `composer.json`:
+```json
+"repositories": [
+    {
+        "type": "vcs",
+        "url": "https://github.com/simondavies/relationships"
+    }
+],
+"require": {
+    "stillat/relationships": "dev-main"
+}
+```
+
+Then run `composer update stillat/relationships`.
+
+## How to Use
+
+Made it past the introduction? Fantastic! Entry Relationships supports a number of relationship types, as well as provides a few helper commands.
+
 ## How to Use
 
 Made it past the introduction? Fantastic! Entry Relationships supports a number of relationship types, as well as provides a few helper commands.
