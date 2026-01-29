@@ -16,12 +16,12 @@
         }
     ],
     "require": {
-        "php": "^8.0",
-        "statamic/cms": "^4.16 || ^5"
+        "php": "^8.1|^8.2|^8.3",
+        "statamic/cms": "^4.16 || ^5 || ^6"
     },
     "require-dev": {
         "mockery/mockery": "^1.2.3",
-        "orchestra/testbench": "^7.0 || ^8.0 || ^9"
+        "orchestra/testbench": "^7.0 || ^8.0 || ^9 || ^10"
     },
     "autoload": {
         "psr-4": {
