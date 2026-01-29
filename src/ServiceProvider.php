@@ -29,37 +29,6 @@ use Stillat\Relationships\Processors\RelationshipProcessor;
 
 class ServiceProvider extends AddonServiceProvider
 {
-    protected $listen = [
-        EntrySaving::class => [
-            EntrySavingListener::class,
-        ],
-        EntrySaved::class => [
-            EntrySavedListener::class,
-        ],
-        EntryDeleted::class => [
-            EntryDeletedListener::class,
-        ],
-
-        UserSaving::class => [
-            UserSavingListener::class,
-        ],
-        UserSaved::class => [
-            UserSavedListener::class,
-        ],
-        UserDeleted::class => [
-            UserDeletedListener::class,
-        ],
-        TermSaving::class => [
-            TermSavingListener::class,
-        ],
-        TermSaved::class => [
-            TermSavedListener::class,
-        ],
-        TermDeleted::class => [
-            TermDeletedListener::class,
-        ],
-    ];
-
     protected $commands = [
         FillRelationshipsCommand::class,
         ListRelationshipsCommand::class,
@@ -79,17 +48,17 @@ class ServiceProvider extends AddonServiceProvider
     public function boot()
     {
         parent::boot();
-        
+
         // Manually register event listeners for Statamic v6 compatibility
         // The $listen property doesn't auto-register in v6's AddonServiceProvider
         Event::listen(EntrySaving::class, EntrySavingListener::class);
         Event::listen(EntrySaved::class, EntrySavedListener::class);
         Event::listen(EntryDeleted::class, EntryDeletedListener::class);
-        
+
         Event::listen(UserSaving::class, UserSavingListener::class);
         Event::listen(UserSaved::class, UserSavedListener::class);
         Event::listen(UserDeleted::class, UserDeletedListener::class);
-        
+
         Event::listen(TermSaving::class, TermSavingListener::class);
         Event::listen(TermSaved::class, TermSavedListener::class);
         Event::listen(TermDeleted::class, TermDeletedListener::class);
